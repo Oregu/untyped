@@ -16,7 +16,8 @@ What is already working:
 ```
 Ok, straight evaluation is working (for Church numerals and successor at least).
 
-==Future work
+Future work
+-----------
 - No explicit parentheses
 - No Clojure syntax (lambdas)
 - Run backwards (generate combinators, for example 'eater' Fx=F)
