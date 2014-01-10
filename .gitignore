@@ -1,7 +1,8 @@
-pom.xml
 *jar
 /lib/
 /classes/
 /target/
 .lein-deps-sum
 .lein-repl-history
+*.sublime-*
+.nrepl-port

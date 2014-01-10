@@ -1,4 +1,4 @@
-(defproject rel-lambda "0.1.1"
+(defproject untyped "0.1.1"
   :description "Relational lambda calculus interpreter with clojure core.logic."
   :url "http://github.com/Oregu/rel-lambda"
 
