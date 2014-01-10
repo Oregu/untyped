@@ -15,3 +15,8 @@ What is already working:
 => ((fn [f] (fn [x] (f (f (f (f x)))))))       ;; Four f's (we got 4)
 ```
 Ok, straight evaluation is working (for Church numerals and successor at least).
+
+==Future work
+- No explicit parentheses
+- No Clojure syntax (lambdas)
+- Run backwards (generate combinators, for example 'eater' Fx=F)
