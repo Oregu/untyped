@@ -26,7 +26,6 @@
     [(fresh [x body body-ex]
       (== `(~'fn [~x] ~body) exp)
       (symbolo x)
-      (trace-lvars "lam" [x body])
       (eval-expo body body-ex)
       (== `(~'fn [~x] ~body-ex) val))]))
 
