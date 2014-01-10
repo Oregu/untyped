@@ -1,4 +1,4 @@
-rel-lambda
+Untyped
 ==========
 
 Relational lambda calculus interpreter.
