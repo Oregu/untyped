@@ -1,4 +1,4 @@
-(ns lam.core
+(ns untyped.core
   (:refer-clojure :exclude [==])
   (:use [clojure.core.logic]))
 
@@ -33,8 +33,10 @@
       (eval-expo rator env r1)
       (eval-expo rand env r2)
       (conde
-        [(not-fno r1) (== `(~r1 ~r2) val)]
-        [(== `(~'fn [~x] ~b) r1) (eval-expo `(~r1 ~r2) env val)]))]
+        [(not-fno r1)
+         (== `(~r1 ~r2) val)]
+        [(== `(~'fn [~x] ~b) r1)
+         (eval-expo `(~r1 ~r2) env val)]))]
     [(fresh [x body body2]
       (== `(~'fn [~x] ~body) exp)
       (symbolo x)

@@ -1,7 +1,7 @@
-(ns lam.lamcalc
+(ns untyped.lamcalc
   (:refer-clojure :exclude [==])
   (:use [clojure.core.logic]
-        [lam.core]))
+        [untyped.core]))
 
 (def ch-zero '(fn [f] (fn [x] x)))
 (def ch-succ '(fn [n] (fn [f] (fn [x] (f ((n f) x))))))
