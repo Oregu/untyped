@@ -29,14 +29,10 @@
       (eval-expo body env+ val))]
     [(fresh [rator rand r1 r2 x b]
       (== `(~rator ~rand) exp)
-      (not-fno rator)
       (eval-expo rator env r1)
+      (not-fno r1)
       (eval-expo rand env r2)
-      (conde
-        [(not-fno r1)
-         (== `(~r1 ~r2) val)]
-        [(== `(~'fn [~x] ~b) r1)
-         (eval-expo `(~r1 ~r2) env val)]))]
+      (== `(~r1 ~r2) val))]
     [(fresh [x body body2]
       (== `(~'fn [~x] ~body) exp)
       (symbolo x)
