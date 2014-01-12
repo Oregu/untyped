@@ -1,4 +1,4 @@
-(ns untyped.lamcalc
+(ns untyped.church
   (:refer-clojure :exclude [==])
   (:use [clojure.core.logic]
         [untyped.core]))
