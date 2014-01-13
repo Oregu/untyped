@@ -5,6 +5,8 @@ Relational lambda calculus interpreter.
 
 What is already working:
 ```clojure
+(use 'untyped.core)
+
 (first (run* [q]
   (eval-expo
     '((fn [n] (fn [f] (fn [x] (f ((n f) x))))) ;; Church numerals successor

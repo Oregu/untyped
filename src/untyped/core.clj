@@ -27,9 +27,10 @@
       (eval-expo rand env r2)
       (conso `(~x ~r2) env env+)
       (eval-expo body env+ val))]
-    [(fresh [rator rand r1 r2 x b]
+    [(fresh [rator rand r1 r2 x body]
       (== `(~rator ~rand) exp)
       (eval-expo rator env r1)
+      ; (!= r1 `(~'fn [~x] ~body)) ; Not supported? Check.
       (not-fno r1)
       (eval-expo rand env r2)
       (== `(~r1 ~r2) val))]
