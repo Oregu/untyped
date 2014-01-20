@@ -10,12 +10,14 @@ Successor and summator
   (eval-expo
     '((fn [n] (fn [f] (fn [x] (f ((n f) x))))) ;; Church numerals successor
       (fn [f] (fn [x] (f (f (f x))))))         ;; Number three (3)
-    q)))                                       ;; What is the result?
+    '() q)))                                   ;; What is the result?
 
 => (fn [f] (fn [x] (f (f (f (f x))))))       ;; Four f's (we got 4)
 
-
-(first (run 1 [q] (eval-expo `((~ch-plus ~ch-three) ~ch-two) '() q)))
+(first (run* [q]
+  (eval-expo
+  `((~ch-plus ~ch-three) ~ch-two)
+  '() q)))
 
 => (fn [f] (fn [x] (f (f (f (f (f x)))))))   ;; Yes, five
 ```
