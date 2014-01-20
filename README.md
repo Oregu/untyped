@@ -23,7 +23,7 @@ Successor and summator
 ```
 Running backwards
 -----------------
-With this version I was able to generate number three with expression (ch-succ q)=ch-four.
+With [this version](https://github.com/Oregu/untyped/blob/b96ddf6a0706963c11166a90e3f24846b9dd3146/src/untyped/core.clj) I was able to generate number three with expression (ch-succ q)=ch-four.
 However it took 77 seconds (with more eager evaluation I couldn't wait for it to stop).
 ```clojure
 (time (first (run 1 [q] (eval-expo `(~ch-succ ~q) '() ch-four))))
