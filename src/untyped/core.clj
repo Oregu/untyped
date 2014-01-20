@@ -2,10 +2,14 @@
   (:refer-clojure :exclude [==])
   (:use [clojure.core.logic]))
 
-(defn not-fn? [x] (or (not (coll? x)) (empty? x) (not= (first x) 'fn)))
+(defn not-fn? [x]
+  (or (not (coll? x))
+      (empty? x)
+      (not= (first x) 'fn)
+      (not (vector? (second x)))))
 
-(defn symbolo [x] (predc x symbol?))
 (defn not-fno [x] (predc x not-fn?))
+(defn symbolo [x] (predc x symbol?))
 
 (defn lookupo [x env t]
   (conde
@@ -27,13 +31,19 @@
       (eval-expo rand env r2)
       (conso `(~x ~r2) env env+)
       (eval-expo body env+ val))]
-    [(fresh [rator rand r1 r2 x body]
-      (== `(~rator ~rand) exp)
+    [(fresh [rator rand r1 r2 h t]
+      (== `(~rator ~rand) exp)      
+      (conso h t env)
       (eval-expo rator env r1)
-      ; (!= r1 `(~'fn [~x] ~body)) ; Not supported? Check.
       (not-fno r1)
       (eval-expo rand env r2)
       (== `(~r1 ~r2) val))]
+    [(fresh [rator rand r1]
+      (== `(~rator ~rand) exp)
+      (emptyo env)
+      (eval-expo rator env r1)
+      (not-fno r1)
+      (== exp val))]
     [(fresh [x body body2]
       (== `(~'fn [~x] ~body) exp)
       (symbolo x)
