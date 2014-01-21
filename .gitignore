@@ -2,7 +2,6 @@
 /lib/
 /classes/
 /target/
-.lein-deps-sum
-.lein-repl-history
+.lein-*
 *.sublime-*
 .nrepl-port
