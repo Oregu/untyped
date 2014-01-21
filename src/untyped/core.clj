@@ -11,41 +11,46 @@
 (defn not-fno [x] (predc x not-fn?))
 (defn symbolo [x] (predc x symbol?))
 
-(defn lookupo [x env t]
-  (conde
-    [(emptyo env) (== x t)]
-    [(fresh [rest y v]
-      (conso `(~y ~v) rest env)
-      (conde
-        [(== y x) (== v t)]
-        [(!= y x) (lookupo x rest t)]))]))
-
-(defn eval-expo [exp env val]
+(defn substo [exp x v subexp]
   (conde
     [(symbolo exp)
-     (lookupo exp env val)]
-    [(fresh [rator rand r2 x body env+]
+     (== x exp)
+     (== v subexp)]
+    [(symbolo exp)
+     (!= exp x)
+     (== exp subexp)]
+    [(fresh [rator rand r1 r2]
       (== `(~rator ~rand) exp)
-      (eval-expo rator env `(~'fn [~x] ~body))
+      (substo rator x v r1)
+      (substo rand x v r2)
+      (conde
+        [(fresh [x body]
+          (== r1 `(~'fn [~x] ~body))
+          (substo body x r2 subexp))]
+        [(not-fno r1)
+         (== `(~r1 ~r2) subexp)]))]
+    [(fresh [arg body subbody]
+      (== `(~'fn [~arg] ~body) exp)
+      (substo body x v subbody)
+      (== `(~'fn [~arg] ~subbody) subexp))]))
+
+(defn eval-expo [exp val]
+  (conde
+    [(symbolo exp)
+     (== exp val)]
+    [(fresh [rator rand r2 x body]
+      (== `(~rator ~rand) exp)
+      (eval-expo rator `(~'fn [~x] ~body))
       (symbolo x)
-      (eval-expo rand env r2)
-      (conso `(~x ~r2) env env+)
-      (eval-expo body env+ val))]
-    [(fresh [rator rand r1 r2 h t]
-      (== `(~rator ~rand) exp)      
-      (conso h t env)
-      (eval-expo rator env r1)
-      (not-fno r1)
-      (eval-expo rand env r2)
-      (== `(~r1 ~r2) val))]
+      (eval-expo rand r2)
+      (substo body x r2 val))]
     [(fresh [rator rand r1]
       (== `(~rator ~rand) exp)
-      (emptyo env)
-      (eval-expo rator env r1)
+      (eval-expo rator r1)
       (not-fno r1)
       (== exp val))]
     [(fresh [x body body2]
       (== `(~'fn [~x] ~body) exp)
       (symbolo x)
-      (eval-expo body env body2)
+      (eval-expo body body2)
       (== `(~'fn [~x] ~body2) val))]))
