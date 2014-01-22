@@ -38,11 +38,10 @@
   (conde
     [(symbolo exp)
      (== exp val)]
-    [(fresh [x body body2]
+    [(fresh [x body]
       (== `(~'fn [~x] ~body) exp)
       (symbolo x)
-      (eval-expo body body2)
-      (== `(~'fn [~x] ~body2) val))]
+      (== exp val))]
     [(fresh [rator rand r1]
       (== `(~rator ~rand) exp)
       (eval-expo rator r1)

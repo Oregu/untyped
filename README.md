@@ -23,13 +23,14 @@ Successor and summator
 ```
 Running backwards
 -----------------
-With [this version](https://github.com/Oregu/untyped/blob/b96ddf6a0706963c11166a90e3f24846b9dd3146/src/untyped/core.clj) I was able to generate number three with expression (ch-succ q)=ch-four.
-However it took 77 seconds (with more eager evaluation I couldn't wait for it to stop).
+It already can subtract using successor: (ch-succ q)=ch4.
+For number four it used just half a second, but generating Church 5 takes 20 sec.
 ```clojure
-(time (first (run 1 [q] (eval-expo `(~ch-succ ~q) '() ch-four))))
-"Elapsed time: 77346.962792 msecs"
+(time (first (run 1 [q] (eval-expo `(~ch-succ ~q) '() ch4))))
+"Elapsed time: 578.228557 msecs"
 
-((fn [_0] (fn [_1] (_0 (_0 (_0 _1))))) :- (!= (_1 f)) #<core$symbol_QMARK_ clojure.core$symbol_QMARK_@7116778b> (!= (_1 n)) (!= (_0 _1)) #<core$not_fn_QMARK_ untyped.core$not_fn_QMARK_@62a49a92>)
+((fn [_0] (fn [_1] (_0 (_0 (_0 _1)))))
+:- (!= (_1 f)) #<core$symbol_QMARK_ clojure.core$symbol_QMARK_@7116778b> (!= (_1 n)) (!= (_0 _1)) #<core$not_fn_QMARK_ untyped.core$not_fn_QMARK_@62a49a92>)
 ```
 
 Currently, I can't wait it to generate successor function.
@@ -38,4 +39,4 @@ Future work
 -----------
 - No explicit parentheses
 - No Clojure syntax (lambdas)
-- Run backwards (generate combinators, for example 'eater' Fx=F)
+- Run backwards (generate combinators, for example 'eater' Fx=F, if one exist)
