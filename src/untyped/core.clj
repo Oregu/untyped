@@ -19,6 +19,10 @@
     [(symbolo exp)
      (!= exp x)
      (== exp subexp)]
+    [(fresh [arg body subbody]
+      (== `(~'fn [~arg] ~body) exp)
+      (substo body x v subbody)
+      (== `(~'fn [~arg] ~subbody) subexp))]
     [(fresh [rator rand r1 r2]
       (== `(~rator ~rand) exp)
       (substo rator x v r1)
@@ -28,29 +32,24 @@
           (== r1 `(~'fn [~x] ~body))
           (substo body x r2 subexp))]
         [(not-fno r1)
-         (== `(~r1 ~r2) subexp)]))]
-    [(fresh [arg body subbody]
-      (== `(~'fn [~arg] ~body) exp)
-      (substo body x v subbody)
-      (== `(~'fn [~arg] ~subbody) subexp))]))
+         (== `(~r1 ~r2) subexp)]))]))
 
 (defn eval-expo [exp val]
   (conde
     [(symbolo exp)
      (== exp val)]
-    [(fresh [rator rand r2 x body]
-      (== `(~rator ~rand) exp)
-      (eval-expo rator `(~'fn [~x] ~body))
+    [(fresh [x body body2]
+      (== `(~'fn [~x] ~body) exp)
       (symbolo x)
-      (eval-expo rand r2)
-      (substo body x r2 val))]
+      (eval-expo body body2)
+      (== `(~'fn [~x] ~body2) val))]
     [(fresh [rator rand r1]
       (== `(~rator ~rand) exp)
       (eval-expo rator r1)
       (not-fno r1)
       (== exp val))]
-    [(fresh [x body body2]
-      (== `(~'fn [~x] ~body) exp)
+    [(fresh [rator rand x body]
+      (== `(~rator ~rand) exp)
+      (eval-expo rator `(~'fn [~x] ~body))
       (symbolo x)
-      (eval-expo body body2)
-      (== `(~'fn [~x] ~body2) val))]))
+      (substo body x rand val))]))
