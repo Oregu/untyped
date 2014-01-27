@@ -53,7 +53,7 @@
     [(symbolo exp)
      (!= exp x)
      (== exp subexp)]
-    [(fresh [arg body subbody fv]
+    [(fresh [arg body subbody]
       (== `(~'fn [~arg] ~body) exp)
       ; (free-varo v fv)
       ; (not-in-listo arg fv)
@@ -81,10 +81,11 @@
     [(fresh [rator rand r1]
       (== `(~rator ~rand) exp)
       (eval-expo rator r1)
-      (not-fno r1)
-      (== exp val))]
-    [(fresh [rator rand x body]
-      (== `(~rator ~rand) exp)
-      (eval-expo rator `(~'fn [~x] ~body))
-      (symbolo x)
-      (substo body x rand val))]))
+      (conde
+        [(fresh [x body]
+          (== r1 `(~'fn [~x] ~body))
+          (symbolo x)
+          (substo body x rand val))]
+        [#_(!= r1 `(~'fn [~x] ~body))
+         (not-fno r1)
+         (== exp val)]))]))

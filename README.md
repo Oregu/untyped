@@ -33,7 +33,7 @@ For number four it used just half a second, but generating Church 5 takes 20 sec
 :- (!= (_1 f)) #<core$symbol_QMARK_ clojure.core$symbol_QMARK_@7116778b> (!= (_1 n)) (!= (_0 _1)) #<core$not_fn_QMARK_ untyped.core$not_fn_QMARK_@62a49a92>)
 ```
 
-Currently, it hangs for too long while generating successor function.
+Currently, it overflows stack in attempt to generate Church successor function.
 
 Future work
 -----------

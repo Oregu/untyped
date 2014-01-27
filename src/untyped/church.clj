@@ -21,7 +21,7 @@
   (time (first (run 1 [q] (eval-expo `(~ch-succ ~q) ch6)))))
 
 (defn gen-ch-succ []
-  (time (doall (run 2 [q] (eval-expo `(~q ~ch3) ch4)))))
+  (time (doall (run 1 [q] (eval-expo `(~q ~ch3) ch4)))))
 
 (defn gen-ch-succ-strict []
   (time (doall (run 1 [q]
