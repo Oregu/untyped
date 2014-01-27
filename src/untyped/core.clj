@@ -12,6 +12,7 @@
 (defn symbolo [x] (predc x symbol?))
 
 (defn excludo [x l o]
+  "Exclude var x from list l and put result to the o."
   (conde
     [(emptyo l)(emptyo o)]
     [(fresh [h t t1]
@@ -24,6 +25,7 @@
       (excludo x t o))]))
 
 (defn not-in-listo [x l]
+  "Goal will succeed when var x is not in list l."
   (conde
     [(emptyo l)]
     [(fresh [h t]
@@ -32,6 +34,7 @@
       (not-in-listo x t))]))
 
 (defn free-varo [exp fv]
+  "Generate list of free vars fv for lambda term exp."
   (conde
     [(symbolo exp)
      (conso exp '() fv)]
@@ -46,6 +49,7 @@
       (appendo fv1 fv2 fv))]))
 
 (defn substo [exp x v subexp]
+  "Substitute var x with the value x in lambda term exp, producing term subexp."
   (conde
     [(symbolo exp)
      (== x exp)
@@ -86,6 +90,5 @@
           (== r1 `(~'fn [~x] ~body))
           (symbolo x)
           (substo body x rand val))]
-        [#_(!= r1 `(~'fn [~x] ~body))
-         (not-fno r1)
+        [(not-fno r1)
          (== exp val)]))]))
