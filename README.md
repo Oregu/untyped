@@ -23,7 +23,7 @@ Successor and summator
 ```
 Running backwards
 -----------------
-It already can subtract using successor: (ch-succ q)=ch4.
+It already can subtract using successor: (ch-succ q)=ch4.  
 For number four it used just half a second, but generating Church 5 takes 20 sec.
 ```clojure
 (time (first (run 1 [q] (eval-expo `(~ch-succ ~q) '() ch4))))
@@ -43,5 +43,5 @@ Future work
 
 Notes
 -----
-“This final version of appendo illustrates an important principle: unifications should always come before recursive calls, or calls to other “serious” relations.”
+“This final version of appendo illustrates an important principle: unifications should always come before recursive calls, or calls to other “serious” relations.”  
 (From WIll Byrd's “Relational Programming in miniKanren: Techniques, Applications, and Implementations.”)
