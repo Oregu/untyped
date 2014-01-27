@@ -53,10 +53,10 @@
     [(symbolo exp)
      (!= exp x)
      (== exp subexp)]
-    [(fresh [arg body subbody]
+    [(fresh [arg body subbody fv]
       (== `(~'fn [~arg] ~body) exp)
-      ; (free-varo v fv)
-      ; (not-in-listo arg fv)
+      (free-varo v fv)
+      (not-in-listo arg fv)
       (substo body x v subbody)
       (== `(~'fn [~arg] ~subbody) subexp))]
     [(fresh [rator rand r1 r2]
