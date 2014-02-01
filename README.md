@@ -34,7 +34,7 @@ For number four it used just half a second, but generating Church 5 takes 20 sec
 ```
 
 It successfully produces Church successor function, but uses dark technics like not-avoiding capture substitution.  
-Here is the successor func he thinks will suit me:
+Here is the successor func he thinks will suit me:  
     (fn [n] ((fn [x] n) (f x)))  
 What an idiot…
 
