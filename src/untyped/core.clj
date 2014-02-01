@@ -11,45 +11,51 @@
 (defn not-fno [x] (predc x not-fn?))
 (defn symbolo [x] (predc x symbol?))
 
-(defn substo [exp x v subexp]
-  (conde
-    [(symbolo exp)
-     (== x exp)
-     (== v subexp)]
-    [(symbolo exp)
-     (!= exp x)
-     (== exp subexp)]
-    [(fresh [arg body subbody]
-      (== `(~'fn [~arg] ~body) exp)
-      (substo body x v subbody)
-      (== `(~'fn [~arg] ~subbody) subexp))]
-    [(fresh [rator rand r1 r2]
-      (== `(~rator ~rand) exp)
-      (substo rator x v r1)
-      (substo rand x v r2)
-      (conde
-        [(fresh [x body]
-          (== r1 `(~'fn [~x] ~body))
-          (symbolo x)
-          (substo body x r2 subexp))]
-        [(not-fno r1)
-          (== `(~r1 ~r2) subexp)]))]))
+(defn substo [x env v]
+  (all
+    #_(trace-lvars "substo" [x env v])
+    (conde
+    [(emptyo env)
+     (== x v)]
+    [(fresh [t]
+      (conso `(~x ~v) t env))]
+    [(fresh [h hv t]
+      (conso `(~h ~hv) t env)
+      (!= x h)
+      (substo x t v))])
+    #_(trace-lvars "substo-after" [x env v])))
 
-(defn eval-expo [exp val]
-  (conde
-    #_[(symbolo exp)
-     (== exp val)]
+(defn eval-expo [exp env val]
+  (all
+    (trace-lvars "before" [exp env val])
+    (conde
+    [(symbolo exp)
+     (substo exp env val)]
     [(fresh [x body]
       (== `(~'fn [~x] ~body) exp)
       (symbolo x)
-      (== exp val))]
-    [(fresh [rator rand r1]
-      (== `(~rator ~rand) exp)
-      (eval-expo rator r1)
       (conde
-        [(fresh [x body]
+        [(emptyo env)
+         (== exp val)]
+        [(fresh [h t]
+          (conso h t env)
+          (eval-expo body env val))]))]
+    [(fresh [rator rand r1 r2]
+      (== `(~rator ~rand) exp)
+      (eval-expo rator env r1)
+      (conde
+        [(fresh [x body env+]
           (== r1 `(~'fn [~x] ~body))
           (symbolo x)
-          (substo body x rand val))]
+          (eval-expo rand env r2)
+          (conso `(~x ~r2) env env+)
+          (eval-expo body env+ val))]
         [(not-fno r1)
-         (== exp val)]))]))
+         (conde
+           [(emptyo env)
+            (== exp val)]
+           [(fresh [h t]
+              (conso h t env)
+              (eval-expo rand env r2)
+              (== `(~r1 ~r2) val))])]))])
+  (trace-lvars "after" [exp env val])))
