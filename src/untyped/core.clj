@@ -27,7 +27,7 @@
 
 (defn eval-expo [exp env val]
   (all
-    (trace-lvars "before" [exp env val])
+    #_(trace-lvars "before" [exp env val])
     (conde
     [(symbolo exp)
      (substo exp env val)]
@@ -37,9 +37,10 @@
       (conde
         [(emptyo env)
          (== exp val)]
-        [(fresh [h t]
+        [(fresh [h t b2]
           (conso h t env)
-          (eval-expo body env val))]))]
+          (eval-expo body env b2)
+          (== `(~'fn [~x] ~b2) val))]))]
     [(fresh [rator rand r1 r2]
       (== `(~rator ~rand) exp)
       (eval-expo rator env r1)
@@ -58,4 +59,4 @@
               (conso h t env)
               (eval-expo rand env r2)
               (== `(~r1 ~r2) val))])]))])
-  (trace-lvars "after" [exp env val])))
+  #_(trace-lvars "after" [exp env val])))
