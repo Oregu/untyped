@@ -25,8 +25,10 @@
 
 (defn gen-ch-succ-strict []
   (time (doall (run 1 [q]
+                    (eval-expo `(~q ~ch0) ch1)
                     (eval-expo `(~q ~ch1) ch2)
+                    (eval-expo `(~q ~ch2) ch3)
                     (eval-expo `(~q ~ch3) ch4)))))
 
-(defn gen-eater []
+(defn gen-eater [] ;; Also called K-infinity
   (time (first (run 1 [q] (eval-expo `(~q ~'x) q)))))

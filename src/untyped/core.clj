@@ -30,13 +30,14 @@
       (conde
         [(fresh [x body]
           (== r1 `(~'fn [~x] ~body))
+          (symbolo x)
           (substo body x r2 subexp))]
         [(not-fno r1)
           (== `(~r1 ~r2) subexp)]))]))
 
 (defn eval-expo [exp val]
   (conde
-    [(symbolo exp)
+    #_[(symbolo exp)
      (== exp val)]
     [(fresh [x body]
       (== `(~'fn [~x] ~body) exp)
