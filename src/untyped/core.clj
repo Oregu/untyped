@@ -12,9 +12,7 @@
 (defn symbolo [x] (predc x symbol?))
 
 (defn substo [x env v]
-  (all
-    #_(trace-lvars "substo" [x env v])
-    (conde
+  (conde
     [(emptyo env)
      (== x v)]
     [(fresh [t]
@@ -22,13 +20,10 @@
     [(fresh [h hv t]
       (conso `(~h ~hv) t env)
       (!= x h)
-      (substo x t v))])
-    #_(trace-lvars "substo-after" [x env v])))
+      (substo x t v))]))
 
 (defn eval-expo [exp env val]
-  (all
-    #_(trace-lvars "before" [exp env val])
-    (conde
+  (conde
     [(symbolo exp)
      (substo exp env val)]
     [(fresh [x body]
@@ -58,5 +53,4 @@
            [(fresh [h t]
               (conso h t env)
               (eval-expo rand env r2)
-              (== `(~r1 ~r2) val))])]))])
-  #_(trace-lvars "after" [exp env val])))
+              (== `(~r1 ~r2) val))])]))]))
