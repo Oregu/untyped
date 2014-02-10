@@ -1,6 +1,7 @@
 Untyped
 ==========
 Relational lambda calculus interpreter.
+(TODO: numero and symbolo code: [click](https://gist.github.com/swannodette/8876121).
 Successor and summator
 ----------------------
 ```clojure
