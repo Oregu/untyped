@@ -43,10 +43,10 @@ Wow…
 
 Branches
 --------
-master — evaluating expression with explicit substitution step. Not capture avoiding. Produces Church numeral 3 in half a second.
-eval-only — evaluating expression with eval-expo only, passing environment around. Messy. Not capture avoiding. Produces Church numeral 3 in 2 seconds.
-cas — attempt to add capture avoiding step. Perfomance problems. Result looks weird. In progress.
-nom — yet to be created. They say nominal logic can solve my problem.
+- master — evaluating expression with explicit substitution step. Not capture avoiding. Produces Church numeral 3 in half a second.
+- eval-only — evaluating expression with eval-expo only, passing environment around. Messy. Not capture avoiding. Produces Church numeral 3 in 2 seconds.
+- cas — attempt to add capture avoiding step. Perfomance problems. Result looks weird. In progress.
+- nom — They say nominal logic can solve my problem.
 
 Future work
 -----------
