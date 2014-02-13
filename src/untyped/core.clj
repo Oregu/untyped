@@ -37,8 +37,6 @@
 
 (defn eval-expo [exp val]
   (conde
-    #_[(symbolo exp)
-     (== exp val)]
     [(fresh [x body]
       (== `(~'fn [~x] ~body) exp)
       (symbolo x)
