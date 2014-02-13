@@ -8,8 +8,8 @@
       (not= (first x) 'fn)
       (not (vector? (second x)))))
 
-(defn not-fno [x] (predc x not-fn?))
-(defn symbolo [x] (predc x symbol?))
+(defn not-fno [x] (predc x not-fn? 'not-fn?))
+(defn symbolo [x] (predc x symbol? 'symbol?))
 
 (defn substo [exp x v subexp]
   (conde
