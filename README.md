@@ -1,7 +1,7 @@
 Untyped
 ==========
 Relational lambda calculus interpreter.
-(TODO: numero and symbolo code: [click](https://gist.github.com/swannodette/8876121).
+(TODO: numero and symbolo code: [click](https://gist.github.com/swannodette/8876121)).
 Successor and summator
 ----------------------
 ```clojure
@@ -31,7 +31,7 @@ For number four it used just half a second, but generating Church 5 takes 20 sec
 "Elapsed time: 578.228557 msecs"
 
 ((fn [_0] (fn [_1] (_0 (_0 (_0 _1)))))
-:- (!= (_1 f)) #<core$symbol_QMARK_ clojure.core$symbol_QMARK_@7116778b> (!= (_1 n)) (!= (_0 _1)) #<core$not_fn_QMARK_ untyped.core$not_fn_QMARK_@62a49a92>)
+:- (!= (_1 f)) symbol? (!= (_1 n)) (!= (_0 _1)) not-fn?)
 ```
 
 It successfully produces Church successor function, but uses dark technics like not-avoiding capture substitution.  
