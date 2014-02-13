@@ -1,6 +1,7 @@
 (ns untyped.core
   (:refer-clojure :exclude [==])
-  (:use [clojure.core.logic]))
+  (:use [clojure.core.logic]
+        [clojure.core.logic.nominal :exclude [fresh hash] :as nom]))
 
 (defn not-fn? [x]
   (or (not (coll? x))
@@ -8,8 +9,8 @@
       (not= (first x) 'fn)
       (not (vector? (second x)))))
 
-(defn not-fno [x] (predc x not-fn?))
-(defn symbolo [x] (predc x symbol?))
+(defn not-fno [x] (predc x not-fn? 'not-fn))
+(defn symbolo [x] (predc x symbol? 'symbol))
 
 (defn substo [exp x v subexp]
   (conde
@@ -37,9 +38,10 @@
 
 (defn eval-expo [exp val]
   (conde
-    [(fresh [x body]
+    [(nom/fresh [x body]
       (== `(~'fn [~x] ~body) exp)
       (symbolo x)
+      (nom/tie x body)
       (== exp val))]
     [(fresh [rator rand r1]
       (== `(~rator ~rand) exp)
