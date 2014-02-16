@@ -54,6 +54,11 @@ Future work
 - No Clojure syntax (lambdas)
 - Run backwards (generate combinators, for example 'eater' Fx=F, if one exist)
 
+Resources
+---------
+[Nominal Wiki](https://github.com/clojure/core.logic/wiki/core.logic.nominal)
+[Nominal @namin talk](https://github.com/namin/minikanren-confo/blob/master/src/talk.clj)
+
 Notes
 -----
 “This final version of appendo illustrates an important principle: unifications should always come before recursive calls, or calls to other “serious” relations.”  

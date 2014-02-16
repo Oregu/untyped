@@ -12,6 +12,9 @@
 (defn not-fno [x] (predc x not-fn? 'not-fn?))
 (defn symbolo [x] (predc x symbol? 'symbol?))
 
+(defn lam  [x e] `(~'fn ~(nom/tie x e)))
+(defn lamo [x e o] (== o (lam x e)))
+
 (defn substo [exp x v subexp]
   (conde
     [(symbolo exp)
@@ -20,17 +23,19 @@
     [(symbolo exp)
      (!= exp x)
      (== exp subexp)]
-    [(fresh [arg body subbody]
-      (== `(~'fn [~arg] ~body) exp)
-      (substo body x v subbody)
-      (== `(~'fn [~arg] ~subbody) subexp))]
+    [(nom/fresh [arg body subbody]
+      (lamo arg body exp)
+      (lamo arg subbody subexp)
+      (nom/hash arg v)
+      (nom/hash arg x)
+      (substo body x v subbody))]
     [(fresh [rator rand r1 r2]
       (== `(~rator ~rand) exp)
       (substo rator x v r1)
       (substo rand x v r2)
       (conde
         [(fresh [x body]
-          (== r1 `(~'fn [~x] ~body))
+          (lamo x body r1)
           (symbolo x)
           (substo body x r2 subexp))]
         [(not-fno r1)
@@ -38,10 +43,9 @@
 
 (defn eval-expo [exp val]
   (conde
-    [(nom/fresh [x body]
+    [(fresh [x body]
       (== `(~'fn [~x] ~body) exp)
       (symbolo x)
-      (nom/tie x body)
       (== exp val))]
     [(fresh [rator rand r1]
       (== `(~rator ~rand) exp)
