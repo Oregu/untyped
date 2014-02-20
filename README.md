@@ -56,7 +56,7 @@ Future work
 
 Resources
 ---------
-[Nominal Wiki](https://github.com/clojure/core.logic/wiki/core.logic.nominal)
+[Nominal Wiki](https://github.com/clojure/core.logic/wiki/core.logic.nominal)  
 [Nominal @namin talk](https://github.com/namin/minikanren-confo/blob/master/src/talk.clj)
 
 Notes
