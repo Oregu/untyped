@@ -1,10 +1,19 @@
 (ns untyped.church
   (:refer-clojure :exclude [==])
   (:use [clojure.core.logic]
+        [clojure.core.logic.nominal :exclude [fresh hash] :as nom]
         [untyped.core]))
 
 (def ch0 '(fn [f] (fn [x] x)))
 (def ch-succ '(fn [n] (fn [f] (fn [x] (f ((n f) x))))))
+
+(defn test-succ []
+  (run 1 [q]
+    (nom/fresh [n f x f1 x1]
+      (namin-eval-expo
+        (app
+          (lam n (lam f (lam x (app f (app (app n f) x)))))
+          (lam f1 (lam x1 x1))) q))))
 
 (def ch1 (first (run 1 [q] (eval-expo `(~ch-succ ~ch0) q))))
 (def ch2 (first (run 1 [q] (eval-expo `(~ch-succ ~ch1) q))))
