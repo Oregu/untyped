@@ -37,10 +37,10 @@
          (nom/fresh [x]
            (conde
              [(lamo x b o1)
-              (trace-lvars "equal" [o1 x b o2])
+              #_(trace-lvars "equal" [o1 x b o2])
               (namin-substo b o2 x out)]
              [(not-fno o1)
-              (trace-lvars "not-equal" [o1 x b])
+              #_(trace-lvars "not-equal" [o1 x b])
               (appo o1 o2 out)]))))]
     [(fresh [e0 o0]
        (nom/fresh [c]
@@ -55,12 +55,12 @@
     [(fresh [body]
       (nom/fresh [x]
         (lamo x body exp)
-        (trace-lvars "lamo" [x body exp val])
+        #_(trace-lvars "lamo" [x body exp val])
         (== exp val)))]
     [(fresh [rator rand body]
       (nom/fresh [x]
         (appo rator rand exp)
-        (trace-lvars "appo" [rator rand])
+        #_(trace-lvars "appo" [rator rand])
         (lamo x body rator)
         (namin-substo body rand x val)))]))
 
