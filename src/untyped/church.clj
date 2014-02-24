@@ -13,7 +13,7 @@
       (namin-eval-expo
         (app
           (lam n (lam f (lam x (app f (app (app n f) x)))))
-          (lam f1 (lam x1 x1))) q))))
+          (lam f1 (lam x1 (app f1 x1)))) q))))
 
 (def ch1 (first (run 1 [q] (eval-expo `(~ch-succ ~ch0) q))))
 (def ch2 (first (run 1 [q] (eval-expo `(~ch-succ ~ch1) q))))
@@ -22,6 +22,16 @@
 (def ch3 (first (run 1 [q] (eval-expo `((~ch+ ~ch1) ~ch2) q))))
 (def ch4 (first (run 1 [q] (eval-expo `((~ch+ ~ch2) ~ch2) q))))
 (def ch6 (first (run 1 [q] (eval-expo `((~ch+ ~ch2) ~ch4) q))))
+
+(defn test-plus []
+  (run 1 [q]
+    (nom/fresh [m n f x f1 x1 f2 x2]
+      (namin-eval-expo
+        (app
+          (app
+            (lam n (lam m (lam f (lam x (app (app m f) (app (app n f) x)))))) ; +
+            (lam f1 (lam x1 (app f1 (app f1 x1))))) ; 2
+          (lam f2 (lam x2 (app f2 (app f2 (app f2 x2)))))) q)))) ; 3
 
 (defn gen-ch3 []
   (time (first (run 1 [q] (eval-expo `(~ch-succ ~q) ch4)))))

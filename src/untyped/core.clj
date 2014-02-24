@@ -7,7 +7,8 @@
   (or (not (coll? x))
       (empty? x)
       (not= (first x) 'fn)
-      (not (vector? (second x)))))
+      ; Doesn't work for tie
+      #_(not (vector? (second x)))))
 
 (defn not-fno [x] (predc x not-fn? 'not-fn?))
 (defn symbolo [x] (predc x symbol? 'symbol?))
@@ -30,9 +31,17 @@
     [(nomo e) (!= e a) (== e out)]
     [(fresh [e1 e2 o1 o2]
        (appo e1 e2 e)
-       (appo o1 o2 out)
        (namin-substo e1 new a o1)
-       (namin-substo e2 new a o2))]
+       (namin-substo e2 new a o2)
+       (fresh [b]
+         (nom/fresh [x]
+           (conde
+             [(lamo x b o1)
+              (trace-lvars "equal" [o1 x b o2])
+              (namin-substo b o2 x out)]
+             [(not-fno o1)
+              (trace-lvars "not-equal" [o1 x b])
+              (appo o1 o2 out)]))))]
     [(fresh [e0 o0]
        (nom/fresh [c]
          (lamo c e0 e)
