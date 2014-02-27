@@ -42,10 +42,10 @@ Wow…
 
 Branches
 --------
-- master — current approach is nominal logic programming.
-- naive — evaluating expression with explicit substitution step. Not capture avoiding. Produces Church numeral 3 in half a second.
-- cas — attempt to add capture avoiding step. Perfomance problems. Result looks weird. In progress.
-- eval-only — eval-expo with passing environment around. Messy. Not capture avoiding. Produces Church numeral 3 in 2 seconds.
+- [master](https://github.com/Oregu/untyped) — current approach is nominal logic programming.
+- [naive](https://github.com/Oregu/untyped/tree/naive) — evaluating expression with explicit substitution step. Not capture avoiding. Produces Church numeral 3 in half a second.
+- [cas](https://github.com/Oregu/untyped/tree/cas) — attempt to add capture avoiding step. Perfomance problems. Result looks weird. In progress.
+- [eval-only](https://github.com/Oregu/untyped/tree/eval-only) — eval-expo with passing environment around. Messy. Not capture avoiding. Produces Church numeral 3 in 2 seconds.
 
 Future work
 -----------
