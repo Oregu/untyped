@@ -1,17 +1,19 @@
 (ns untyped.test.core
   (:refer-clojure :exclude [==])
   (:use [clojure.core.logic :exclude [is]]
+        [clojure.core.logic.nominal :exclude [fresh hash] :as nom]
         untyped.core
         clojure.test))
 
 (deftest eval-forward
-  (is (= '(fn [a] a)
-         (first
-           (run 1 [q]
-             (eval-expo '((fn [x] (x x)) (fn [a] a)) q))))))
+  (is (first
+    (run 1 [q]
+      (nom/fresh [x a]
+        (eval-expo (app (lam x (app x x)) (lam a a)) q)
+        (lamo a a q))))))
 
 (deftest eval-backward-id
-  (is (= '(fn [_0] _0)
+  (is (= '(fn [a_0] a_0)
          (first (first
             (run 1 [q]
               (fresh [a] (eval-expo `(~q (~'fn [~'a] ~'a))
