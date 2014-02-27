@@ -1,7 +1,6 @@
 Untyped
 ==========
 Relational lambda calculus interpreter.
-(TODO: numero and symbolo code: [click](https://gist.github.com/swannodette/8876121)).
 Successor and summator
 ----------------------
 ```clojure
@@ -24,7 +23,7 @@ Successor and summator
 ```
 Running backwards
 -----------------
-It already can subtract using successor: (ch-succ q)=ch4.  
+It already can subtract using successor: (ch-succ q)=ch4.
 For number four it used just half a second, but generating Church 5 takes 20 sec.
 ```clojure
 (time (first (run 1 [q] (eval-expo `(~ch-succ ~q) '() ch4))))
@@ -34,7 +33,7 @@ For number four it used just half a second, but generating Church 5 takes 20 sec
 :- (!= (_1 f)) symbol? (!= (_1 n)) (!= (_0 _1)) not-fn?)
 ```
 
-It successfully produces Church successor function, but uses dark technics like not-avoiding capture substitution.  
+It successfully produces Church successor function, but uses dark technics like not-avoiding capture substitution.
 Here is the successor func he thinks will suit me:
 ```clojure
 (fn [n] ((fn [x] n) (f x)))
@@ -43,23 +42,23 @@ Wow…
 
 Branches
 --------
-- master — evaluating expression with explicit substitution step. Not capture avoiding. Produces Church numeral 3 in half a second.
-- eval-only — evaluating expression with eval-expo only, passing environment around. Messy. Not capture avoiding. Produces Church numeral 3 in 2 seconds.
+- master — current approach is nominal logic programming.
+- naive — evaluating expression with explicit substitution step. Not capture avoiding. Produces Church numeral 3 in half a second.
 - cas — attempt to add capture avoiding step. Perfomance problems. Result looks weird. In progress.
-- nom — They say nominal logic can solve my problem.
+- eval-only — eval-expo with passing environment around. Messy. Not capture avoiding. Produces Church numeral 3 in 2 seconds.
 
 Future work
 -----------
 - No explicit parentheses
-- No Clojure syntax (lambdas)
-- Run backwards (generate combinators, for example 'eater' Fx=F, if one exist)
+- Lambdas instead of ‘fn’ syntax ()
+- Run backwards (generate combinators, for example ‘greedy’/‘eater’/‘K-∞’ Fx=F, if one exist)
 
 Resources
 ---------
-[Nominal Wiki](https://github.com/clojure/core.logic/wiki/core.logic.nominal)  
+[Nominal Wiki](https://github.com/clojure/core.logic/wiki/core.logic.nominal)
 [Nominal @namin talk](https://github.com/namin/minikanren-confo/blob/master/src/talk.clj)
 
 Notes
 -----
-“This final version of appendo illustrates an important principle: unifications should always come before recursive calls, or calls to other “serious” relations.”  
+“This final version of appendo illustrates an important principle: unifications should always come before recursive calls, or calls to other “serious” relations.”
 (From WIll Byrd's “Relational Programming in miniKanren: Techniques, Applications, and Implementations.”)
