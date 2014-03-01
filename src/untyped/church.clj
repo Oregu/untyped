@@ -4,37 +4,21 @@
         [clojure.core.logic.nominal :exclude [fresh hash] :as nom]
         [untyped.core]))
 
-(def ch0 '(fn [f] (fn [x] x)))
-(def ch-succ '(fn [n] (fn [f] (fn [x] (f ((n f) x))))))
-
-(defn test-succ []
-  (run 1 [q]
-    (nom/fresh [n f x f1 x1]
-      (eval-expo
-        (app
-          (lam n (lam f (lam x (app f (app (app n f) x)))))
-          (lam f1 (lam x1 (app f1 x1)))) q))))
-
-(defn test-plus []
-  (run 1 [q]
-    (nom/fresh [m n f x f1 x1 f2 x2]
-      (eval-expo
-        (app
-          (app
-            (lam m (lam n (lam f (lam x (app (app m f) (app (app n f) x)))))) ; +
-            (lam f1 (lam x1 (app f1 (app f1 x1)))))                           ; 2
-          (lam f2 (lam x2 (app f2 (app f2 (app f2 x2))))))                    ; 3
-        q))))
+(defn ch0 [f x] (lam f (lam x x)))
+(defn ch1 [f x] (lam f (lam x (app f x))))
+(defn ch4 [f x] (lam f (lam x (app f (app f (app f (app f x)))))))
+(defn ch6 [f x] (lam f (lam x (app f (app f (app f (app f (app f (app f x)))))))))
+(defn ch-succ [n f x] (lam n (lam f (lam x (app f (app (app n f) x))))))
 
 (defn gen-ch3 []
   (time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
-    (app (lam n (lam f (lam x (app f (app (app n f) x))))) q)       ; succ ? =
-    (lam f1 (lam x1 (app f1 (app f1 (app f1 (app f1 x1))))))))))))  ; 4
+    (app (ch-succ n f x) q) ; succ ? =
+    (ch4 f1 x1)))))))       ; 4
 
 (defn gen-ch5 []
   (time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
-    (app (lam n (lam f (lam x (app f (app (app n f) x))))) q)                        ; succ ? =
-    (lam f1 (lam x1 (app f1 (app f1 (app f1 (app f1 (app f1 (app f1 x1)))))))))))))) ; 6
+    (app (ch-succ n f x) q)                        ; succ ? =
+    (ch6 f1 x1))))))) ; 6
 
 (defn gen-ch-succ []
   (time (first (run 1 [q]

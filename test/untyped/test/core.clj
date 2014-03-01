@@ -13,32 +13,33 @@
         (lamo a a q))))))
 
 (deftest eval-backward-id
-  (is (= '(fn [a_0] a_0)
-         (first (first
-            (run 1 [q]
-              (fresh [a] (eval-expo `(~q (~'fn [~'a] ~'a))
-                                    '(fn [a] a)))))))))
+  (is (first
+    (run 1 [q] (nom/fresh [a b]
+      (eval-expo (app q (lam a a))
+                 (lam b b)))))))
 
-(def ch0 '(fn [f] (fn [x] x)))
-(def ch-succ '(fn [n] (fn [f] (fn [x] (f ((n f) x))))))
+(defn ch0 [f x] (lam f (lam x x)))
+(defn ch-succ [n f x] (lam n (lam f (lam x (app f (app (app n f) x))))))
 
-(def ch1 '(fn [f] (fn [x] (f x))))
-(def ch2 '(fn [f] (fn [x] (f (f x)))))
+(defn ch1 [f x] (lam f (lam x (app f x))))
+(defn ch2 [f x] (lam f (lam x (app f (app f x)))))
 
 (deftest eval-succ
-  (is (= ch1
-         (first (run 1 [q] (eval-expo `(~ch-succ ~ch0) q)))))
-  (is (= ch2
-         (first (run 1 [q] (eval-expo `(~ch-succ ~ch1) q))))))
+  (is (first (run 1 [q] (nom/fresh [n f x f1 x1]
+    (eval-expo (app (ch-succ n f x) (ch0 f x))
+               (ch1 f1 x1))))))
+  (is (first (run 1 [q] (nom/fresh [n f x f1 x1]
+    (eval-expo (app (ch-succ n f x) (ch1 f1 x1))
+               (ch2 f x)))))))
 
-(def ch+ '(fn [m] (fn [n] (fn [f] (fn [x] ((m f) ((n f) x)))))))
+(defn ch+ [m n f x] (lam m (lam n (lam f (lam x (app (app m f) (app (app n f) x)))))))
 
-(def ch3 '(fn [f] (fn [x] (f (f (f x))))))
-(def ch4  '(fn [f] (fn [x] (f (f (f (f x)))))))
-(def ch5  '(fn [f] (fn [x] (f (f (f (f (f x))))))))
+(defn ch3 [f x] (lam f (lam x (app f (app f (app f x))))))
+(defn ch4 [f x] (lam f (lam x (app f (app f (app f (app f x)))))))
+(defn ch5 [f x] (lam f (lam x (app f (app f (app f (app f (app f x))))))))
 
 (deftest eval-plus
-  (is (= ch3
-         (first (run 1 [q] (eval-expo `((~ch+ ~ch2) ~ch1) q)))))
-  (is (= ch5
-         (first (run 1 [q] (eval-expo `((~ch+ ~ch3) ~ch2) q))))))
+  (is (first (run 1 [q] (nom/fresh [m n f x f1 x1 f2 x3]
+    (eval-expo (app (app (ch+ m n f x) (ch2 f2 x1)) (ch1 f1 x1)) (ch3 f x3))))))
+  (is (first (run 1 [q] (nom/fresh [m n f x]
+    (eval-expo (app (app (ch+ m n f x) (ch3 f x)) (ch2 f x)) (ch5 f x)))))))
