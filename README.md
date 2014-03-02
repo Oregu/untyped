@@ -23,22 +23,39 @@ Successor and summator
 ```
 Running backwards
 -----------------
-It already can subtract using successor: (ch-succ q)=ch4.
-For number four it used just half a second, but generating Church 5 takes 20 sec.
+We can subtract using successor: (ch-succ q)=ch4.
+For number four it used one second, but generating Church 5 takes 40 sec.
 ```clojure
-(time (first (run 1 [q] (eval-expo `(~ch-succ ~q) '() ch4))))
-"Elapsed time: 578.228557 msecs"
+(time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
+  (app (ch-succ n f x) q) ; succ ? =
+  (ch4 f1 x1))))))        ; 4
+"Elapsed time: 891.251582 msecs"
 
-((fn [_0] (fn [_1] (_0 (_0 (_0 _1)))))
-:- (!= (_1 f)) symbol? (!= (_1 n)) (!= (_0 _1)) not-fn?)
+(fn [a_0] (fn [a_1] (a_0 (a_0 (a_0 a_1))))) ; Three a_0
+
+(time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
+  (app (ch-succ n f x) q) ; succ ? =
+  (ch6 f1 x1))))))        ; 6
+"Elapsed time: 37273.876513 msecs"
+
+(fn [a_0] (fn [a_1] (a_0 (a_0 (a_0 (a_0 (a_0 a_1))))))) ; Five a_0
 ```
 
-It successfully produces Church successor function, but uses dark technics like not-avoiding capture substitution.
-Here is the successor func he thinks will suit me:
+How about producing successor function?
 ```clojure
-(fn [n] ((fn [x] n) (f x)))
+(time (first (run 1 [q]
+  (nom/fresh [f x f1 x1]
+    (eval-expo (app q (lam f (lam x x))) (lam f1 (lam x1 (app f1 x1)))))  ; ? 0 = 1
+  (nom/fresh [f x f1 x1]
+    (eval-expo (app q (lam f (lam x (app f x)))) (lam f1 (lam x1 (app f1 (app f1 x1)))))))))  ; ? 1 = 2
+"Elapsed time: 41572.578565 msecs"
+
+(fn [a_0] (fn [a_1] (fn [a_2] ((a_0 a_1) (a_1 a_2))))) ;; ie: (fn [n] (fn [f] (fn [x] ((n f) (f x)))))
 ```
-Wow…
+41 seconds? In versions without noms I didn't ever got an answer!
+A way to go for sure.
+Actully canonical succ function is (fn [n] (fn [f] (fn [x] (n f x)))) but the one I have seems to work too.
+Probably canonical one is optimized for Church numerals, but I'm not sure. Investigating on it.
 
 Branches
 --------

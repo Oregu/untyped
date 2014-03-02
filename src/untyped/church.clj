@@ -17,8 +17,8 @@
 
 (defn gen-ch5 []
   (time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
-    (app (ch-succ n f x) q)                        ; succ ? =
-    (ch6 f1 x1))))))) ; 6
+    (app (ch-succ n f x) q) ; succ ? =
+    (ch6 f1 x1)))))))       ; 6
 
 (defn gen-ch-succ []
   (time (first (run 1 [q]
