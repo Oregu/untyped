@@ -54,7 +54,11 @@ How about producing successor function?
 ```
 41 seconds? In versions without noms I didn't ever got an answer!
 A way to go for sure.
-Actully canonical succ function is (fn [n] (fn [f] (fn [x] (n f x)))) but the one I have seems to work too.
+Actully canonical succ function is
+```clojure
+(fn [n] (fn [f] (fn [x] (n f x))))
+```
+but the one I have seems to work too.
 Probably canonical one is optimized for Church numerals, but I'm not sure. Investigating on it.
 
 Branches

@@ -6,9 +6,7 @@
 (defn not-fn? [x]
   (or (not (coll? x))
       (empty? x)
-      (not= (first x) 'fn)
-      ; Doesn't work for tie
-      #_(not (vector? (second x)))))
+      (not= (first x) 'fn)))
 
 (defn not-fno [x] (predc x not-fn? 'not-fn?))
 (defn symbolo [x] (predc x symbol? 'symbol?))
@@ -37,10 +35,8 @@
          (nom/fresh [x]
            (conde
              [(lamo x b o1)
-              ; (trace-lvars "equal" [o1 x b o2])
               (substo b o2 x out)]
              [(not-fno o1)
-              ; (trace-lvars "not-equal" [o1 x b])
               (appo o1 o2 out)]))))]
     [(fresh [e0 o0]
        (nom/fresh [c]
@@ -55,12 +51,10 @@
     [(fresh [body]
       (nom/fresh [x]
         (lamo x body exp)
-        ; (trace-lvars "lamo" [x body exp val])
         (== exp val)))]
     [(fresh [rator rand r1 body]
       (nom/fresh [x]
         (appo rator rand exp)
-        ; (trace-lvars "appo" [rator rand])
         (eval-expo rator r1)
         (lamo x body r1)
         (substo body rand x val)))]))
