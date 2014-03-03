@@ -6,7 +6,10 @@
 
 (defn ch0 [f x] (lam f (lam x x)))
 (defn ch1 [f x] (lam f (lam x (app f x))))
+(defn ch2 [f x] (lam f (lam x (app f (app f x)))))
+(defn ch3 [f x] (lam f (lam x (app f (app f (app f x))))))
 (defn ch4 [f x] (lam f (lam x (app f (app f (app f (app f x)))))))
+(defn ch5 [f x] (lam f (lam x (app f (app f (app f (app f (app f x))))))))
 (defn ch6 [f x] (lam f (lam x (app f (app f (app f (app f (app f (app f x)))))))))
 (defn ch-succ [n f x] (lam n (lam f (lam x (app f (app (app n f) x))))))
 
@@ -22,12 +25,17 @@
 
 (defn gen-ch-succ []
   (time (first (run 1 [q]
-  (nom/fresh [f x f1 x1]
-    (eval-expo (app q (lam f (lam x x))) (lam f1 (lam x1 (app f1 x1)))))      ; ? 0 = 1
-  (nom/fresh [f x f1 x1]
-    (eval-expo (app q (lam f (lam x (app f x)))) (lam f1 (lam x1 (app f1 (app f1 x1))))))      ; ? 1 = 2
-  (nom/fresh [f x f1 x1]
-    (eval-expo (app q (lam f (lam x (app f (app f x))))) (lam f1 (lam x1 (app f1 (app f1 (app f1 x1))))))))))) ; ? 2 = 3
+    (nom/fresh [f x f1 x1]
+      (eval-expo (app q (ch0 f x)) (ch1 f1 x1)))     ; q? 0 = 1
+    (nom/fresh [f x f1 x1]
+      (eval-expo (app q (ch1 f x)) (ch2 f1 x1))))))) ; q? 1 = 2
+
+;; NOT working. Overflows
+(defn gen-ch+ []
+  (time (first (run 1 [q]
+    (nom/fresh [f x f1 x1 f2 x2]
+      (eval-expo (app (app q (ch2 f x)) (ch3 f1 x1)) ; q? 2 3 =
+                 (ch5 f2 x2)))))))                   ; 5
 
 (defn gen-eater [] ;; Also called K-infinity
   (time (first (run 1 [q] (nom/fresh [x] (eval-expo (app q x) q))))))
