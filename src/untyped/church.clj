@@ -36,3 +36,10 @@
     (nom/fresh [f x f1 x1 f2 x2]
       (eval-expo (app (app q (ch2 f x)) (ch3 f1 x1)) ; q? 2 3 =
                  (ch5 f2 x2)))))))                   ; 5
+
+;; Still overflows
+(defn gen-ch+-2 []
+  (time (first (run 1 [q] (fresh [s2]
+    (nom/fresh [f x f1 x1 f2 x2]
+      (eval-expo (app q (ch2 f x)) s2)
+      (eval-expo (app s2 (ch3 f1 x1)) (ch5 f2 x2))))))))
