@@ -12,6 +12,7 @@
 (defn ch5 [f x] (lam f (lam x (app f (app f (app f (app f (app f x))))))))
 (defn ch6 [f x] (lam f (lam x (app f (app f (app f (app f (app f (app f x)))))))))
 (defn ch-succ [n f x] (lam n (lam f (lam x (app f (app (app n f) x))))))
+(defn ch+ [m n f x] (lam m (lam n (lam f (lam x (app (app m f) (app (app n f) x)))))))
 
 (defn gen-ch3 []    ;; 898 ms
   (time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
