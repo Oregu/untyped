@@ -23,7 +23,7 @@ Successor and summator
 ```
 Running backwards
 -----------------
-We can subtract using successor: (ch-succ q)=ch4.
+We can subtract using successor: (ch-succ q)=ch4.  
 For number four it used one second, but generating Church 5 takes 40 sec.
 ```clojure
 (time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
@@ -52,13 +52,13 @@ How about producing successor function?
 
 (fn [a_0] (fn [a_1] (fn [a_2] ((a_0 a_1) (a_1 a_2))))) ;; ie: (fn [n] (fn [f] (fn [x] ((n f) (f x)))))
 ```
-41 seconds? In versions without noms I didn't ever got an answer!
-A way to go for sure.
+41 seconds? In versions without noms I didn't ever got an answer!  
+A way to go for sure.  
 Actully canonical succ function is
 ```clojure
 (fn [n] (fn [f] (fn [x] (n f x))))
 ```
-but the one I have seems to work too.
+but the one I have seems to work too.  
 Probably canonical one is optimized for Church numerals, but I'm not sure. Investigating on it.
 
 Branches
@@ -71,15 +71,17 @@ Branches
 Future work
 -----------
 - No explicit parentheses
-- Lambdas instead of ‘fn’ syntax ()
+- Lambdas instead of ‘fn’ syntax
 - Run backwards (generate combinators, for example ‘greedy’/‘eater’/‘K-∞’ Fx=F, if one exist)
 
 Resources
 ---------
-[Nominal Wiki](https://github.com/clojure/core.logic/wiki/core.logic.nominal)
-[Nominal @namin talk](https://github.com/namin/minikanren-confo/blob/master/src/talk.clj)
+[Nominal Wiki](https://github.com/clojure/core.logic/wiki/core.logic.nominal)  
+[Nominal @namin talk](https://github.com/namin/minikanren-confo/blob/master/src/talk.clj)  
+[Introduction to Lambda Calculus](http://www.cse.chalmers.se/research/group/logic/TypesSS05/Extra/geuvers.pdf) — the best I've read.  
+[Benjamin C. Pierce TAPL](http://www.cis.upenn.edu/~bcpierce/tapl/) — the best I've read.  
 
 Notes
 -----
-“This final version of appendo illustrates an important principle: unifications should always come before recursive calls, or calls to other “serious” relations.”
+“This final version of appendo illustrates an important principle: unifications should always come before recursive calls, or calls to other “serious” relations.”  
 (From WIll Byrd's “Relational Programming in miniKanren: Techniques, Applications, and Implementations.”)
