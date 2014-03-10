@@ -8,8 +8,8 @@
 (defn K [x y] (lam x (lam y x)))
 
 (defn SKK []
-  (time (first (run 1 [q] (nom/fresh [x y xx yy z]
-    (eval-expo (S (K x y) (K xx yy) z) q))))))
+  (run 1 [q] (nom/fresh [x y xx yy a b c z]
+    (eval-expo (app (app (app (S a b c) (K x y)) (K xx yy)) z) z))))
 
 (defn gen-eater [] ;; Also called K-infinity
   (time (first (run 1 [q] (nom/fresh [x]
