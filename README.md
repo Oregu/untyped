@@ -23,8 +23,8 @@ Successor and summator
 ```
 Running backwards
 -----------------
-We can decrement with successor: (ch-succ q)=ch4. (q = ch3.)  
-And subtract with summator: (ch+ q ch2)=ch6. (q = ch4.)  
+We can decrement with successor: (ch-succ q)=ch4 => q=ch3.  
+And subtract with summator: (ch+ q ch2)=ch6 => q=ch4.  
 For number four it used one second, but generating Church 5 takes 40 sec.
 ```clojure
 (time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
