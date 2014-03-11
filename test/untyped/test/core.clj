@@ -12,7 +12,7 @@
         (eval-expo (app (lam x (app x x)) (lam a a)) q)
         (lamo a a q))))))
 
-(deftest eval-backward-id
+(deftest eval-backward
   (is (first
     (run 1 [q] (nom/fresh [a b]
       (eval-expo (app q (lam a a))
