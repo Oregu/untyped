@@ -23,6 +23,11 @@
 (defn appo [e1 e2 out] (all (== out (app e1 e2)) (!= e1 'fn)))
 (defn nomo [x] (predc x nom? (reifier-for 'nom x)))
 
+(defn valo [e]
+  (fresh [b]
+    (nom/fresh [x]
+      (lamo x b e))))
+
 (defn substo [e new a out] ;; out == [new/a]e
   (conde
     [(nomo e) (== e a) (== new out)]
@@ -31,13 +36,13 @@
        (appo e1 e2 e)
        (substo e1 new a o1)
        (substo e2 new a o2)
-       (fresh [b]
-         (nom/fresh [x]
-           (conde
-             [(lamo x b o1)
-              (substo b o2 x out)]
-             [(not-fno o1)
-              (appo o1 o2 out)]))))]
+       (conde
+         [(fresh [b]
+            (nom/fresh [x]
+              (lamo x b o1)
+              (substo b o2 x out)))]
+         [(not-fno o1)
+          (appo o1 o2 out)]))]
     [(fresh [e0 o0]
        (nom/fresh [c]
          (lamo c e0 e)
@@ -48,10 +53,7 @@
 
 (defn eval-expo [exp val]
   (conde
-    [(fresh [body]
-      (nom/fresh [x]
-        (lamo x body exp)
-        (== exp val)))]
+    [(valo exp) (== exp val)]
     [(fresh [rator rand r1 body]
       (nom/fresh [x]
         (appo rator rand exp)
