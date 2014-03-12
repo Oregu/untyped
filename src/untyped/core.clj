@@ -32,17 +32,16 @@
   (conde
     [(nomo e) (== e a) (== new out)]
     [(nomo e) (!= e a) (== e out)]
-    [(fresh [e1 e2 o1 o2]
+    [(fresh [e1 e2 o1 o2 b]
        (appo e1 e2 e)
        (substo e1 new a o1)
        (substo e2 new a o2)
-       (conde
-         [(fresh [b]
-            (nom/fresh [x]
-              (lamo x b o1)
-              (substo b o2 x out)))]
-         [(not-fno o1)
-          (appo o1 o2 out)]))]
+       (nom/fresh [x]
+         (conde
+           [(lamo x b o1)
+            (substo b o2 x out)]
+           [(not-fno o1)
+            (appo o1 o2 out)])))]
     [(fresh [e0 o0]
        (nom/fresh [c]
          (lamo c e0 e)
@@ -57,6 +56,6 @@
     [(fresh [rator rand r1 body]
       (nom/fresh [x]
         (appo rator rand exp)
-        (eval-expo rator r1)
         (lamo x body r1)
+        (eval-expo rator r1)
         (substo body rand x val)))]))
