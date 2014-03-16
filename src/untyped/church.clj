@@ -13,13 +13,13 @@
 
 (defn gen-ch3 []    ;; 785 ms
   (time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
-    (app (ch-succ n f x) q) ; succ ? =
-    (ch 4 f1 x1)))))))  ; 4
+    (app (ch-succ n f x) q) ; succ q? =
+    (ch 4 f1 x1)))))))      ; 4
 
 (defn gen-ch5 []    ;; 31 s
   (time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
-    (app (ch-succ n f x) q) ; succ ? =
-    (ch 6 f1 x1)))))))  ; 6
+    (app (ch-succ n f x) q) ; succ q? =
+    (ch 6 f1 x1)))))))      ; 6
 
 (defn gen-ch-succ [] ;; 41 s
   (time (first (run 1 [q]
@@ -33,10 +33,10 @@
   (time (first (run 1 [q]
     (nom/fresh [f x f1 x1 f2 x2]
       (eval-expo (app (app q (ch 1 f x)) (ch 1 f1 x1)) ; q? 1 1 =
-                 (ch 2 f2 x2)))                       ; 2
+                 (ch 2 f2 x2)))                        ; 2
     (nom/fresh [f x f1 x1 f2 x2]
       (eval-expo (app (app q (ch 1 f x)) (ch 2 f1 x1)) ; q? 1 2 =
-                 (ch 3 f2 x2)))                       ; 3
+                 (ch 3 f2 x2)))                        ; 3
     (nom/fresh [f x f1 x1 f2 x2]
       (eval-expo (app (app q (ch 2 f x)) (ch 2 f1 x1)) ; q? 2 2 =
-                 (ch 4 f2 x2)))))))                   ; 4
+                 (ch 4 f2 x2)))))))                    ; 4

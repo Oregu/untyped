@@ -10,18 +10,12 @@
 
 (defn not-fno [x] (predc x not-fn? 'not-fn?))
 (defn symbolo [x] (predc x symbol? 'symbol?))
-
-(defn reifier-for [tag x]
-  (fn [c v r a]
-    (let [x (walk* r (walk* a x))]
-      (when (symbol? x)
-        `(~tag ~x)))))
+(defn nomo    [x] (predc x nom? 'nom?))
 
 (defn lam [x e] `(~'fn ~(nom/tie x e)))
 (defn app [e1 e2] `(~e1 ~e2))
 (defn lamo [x e out] (== out (lam x e)))
 (defn appo [e1 e2 out] (all (== out (app e1 e2)) (!= e1 'fn)))
-(defn nomo [x] (predc x nom? (reifier-for 'nom x)))
 
 (defn valo [e]
   (fresh [b]
@@ -36,12 +30,12 @@
        (appo e1 e2 e)
        (substo e1 new a o1)
        (substo e2 new a o2)
-       (conde
-         [(nom/fresh [x]
-           (lamo x b o1)
-           (substo b o2 x out))]
-         [(not-fno o1)
-          (appo o1 o2 out)]))]
+       (nom/fresh [x]
+        (conde
+          [(lamo x b o1)
+           (substo b o2 x out)]
+          [(not-fno o1)
+           (appo o1 o2 out)])))]
     [(fresh [e0 o0]
        (nom/fresh [c]
          (lamo c e0 e)
