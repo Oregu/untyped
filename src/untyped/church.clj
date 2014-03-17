@@ -29,6 +29,8 @@
       (eval-expo (app q (ch 1 f x)) (ch 2 f1 x1))))))) ; q? 1 = 2
 
 ;; NOT working. Out of memory after 15 mins
+;; With 2 gigs tried to compute for 2 hours
+;; No luck.
 (defn gen-ch+ []
   (time (first (run 1 [q]
     (nom/fresh [f x f1 x1 f2 x2]
