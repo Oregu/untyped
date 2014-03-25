@@ -17,10 +17,10 @@ Successor and summator
 
 (first (run* [q] (nom/fresh [m n f x]
   (eval-expo
-    (app (app (ch+ m n f x) (ch 3 f x)) (ch 2 f x))
+    (app (app (ch+ m n f x) (ch 3 f x)) (ch 2 f x))     ;; What is 3 plus 2?
     q))))
 
-=> (fn [a_0] (fn [a_1] (a_0 (a_0 (a_0 (a_0 (a_0 a_1)))))))  ;; Yes, five
+=> (fn [a_0] (fn [a_1] (a_0 (a_0 (a_0 (a_0 (a_0 a_1)))))))  ;; Yes, 5
 ```
 Nominal logic programming made it a bit clumsy, how can it can be improved to look cleaner?
 
@@ -35,26 +35,26 @@ For number four it used one second, but generating Church 5 takes 40 sec.
   (ch4 f1 x1))))))        ; 4
 "Elapsed time: 891.251582 msecs"
 
-(fn [a_0] (fn [a_1] (a_0 (a_0 (a_0 a_1))))) ; Three a_0
+=> (fn [a_0] (fn [a_1] (a_0 (a_0 (a_0 a_1))))) ; Three a_0
 
 (time (first (run 1 [q] (nom/fresh [n f x f1 x1] (eval-expo
   (app (ch-succ n f x) q) ; succ ? =
   (ch6 f1 x1))))))        ; 6
 "Elapsed time: 37273.876513 msecs"
 
-(fn [a_0] (fn [a_1] (a_0 (a_0 (a_0 (a_0 (a_0 a_1))))))) ; Five a_0
+=> (fn [a_0] (fn [a_1] (a_0 (a_0 (a_0 (a_0 (a_0 a_1))))))) ; Five a_0
 ```
 
 How about producing successor function?
 ```clojure
 (time (first (run 1 [q]
   (nom/fresh [f x f1 x1]
-    (eval-expo (app q (lam f (lam x x))) (lam f1 (lam x1 (app f1 x1)))))  ; ? 0 = 1
-  (nom/fresh [f x f1 x1]
-    (eval-expo (app q (lam f (lam x (app f x)))) (lam f1 (lam x1 (app f1 (app f1 x1)))))))))  ; ? 1 = 2
+    (eval-expo (app q (ch 0 f x) (ch 1 f1 x1)))   ; ? 0 = 1
+    (eval-expo (app q (ch 1 f x)) (ch 2 f x)))))) ; ? 1 = 2
 "Elapsed time: 41572.578565 msecs"
 
-(fn [a_0] (fn [a_1] (fn [a_2] ((a_0 a_1) (a_1 a_2))))) ;; ie: (fn [n] (fn [f] (fn [x] ((n f) (f x)))))
+(fn [a_0] (fn [a_1] (fn [a_2] ((a_0 a_1) (a_1 a_2)))))
+; ie: (fn [n] (fn [f] (fn [x] ((n f) (f x)))))
 ```
 41 seconds? In versions without noms I didn't ever got an answer!  
 A way to go for sure.  
@@ -70,9 +70,9 @@ Combinatory logic
 We can easily generate λ-quine, which Ω:
 ```clojure
 (run 2 [q] (eval-expo q q))
-((fn [a_0] _1)
- (((fn [a_0] a_0) (fn [a_1] (a_1 a_1)))
-  ((fn [a_0] a_0) (fn [a_1] (a_1 a_1)))))
+=> ((fn [a_0] _1)
+     (((fn [a_0] a_0) (fn [a_1] (a_1 a_1)))
+      ((fn [a_0] a_0) (fn [a_1] (a_1 a_1)))))
 ```
 We have two answers back, first one is an abstraction, which is a value and therefore evaluates to itself. And second one is (slightly un-normalised) big omega.
 
