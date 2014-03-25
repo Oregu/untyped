@@ -20,6 +20,10 @@
 ;   (time (first (run 1 [q] (nom/fresh [x y a]
 ;     (eval-expo (app (app q (I x)) y) (app (app x (I a)) y)))))))
 
+(defn gen-quine []
+  (time (doall (run 2 [q]
+    (eval-expo q q)))))
+
 (defn gen-eater [] ;; Also called K-infinity
   (time (first (run 1 [q] (nom/fresh [x]
     (eval-expo (app q x) q))))))
