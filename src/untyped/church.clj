@@ -23,22 +23,25 @@
 
 (defn gen-ch-succ [] ;; 41 s
   (time (first (run 1 [q]
-    (nom/fresh [f x f1 x1]
-      (eval-expo (app q (ch 0 f x)) (ch 1 f1 x1)))     ; q? 0 = 1
-    (nom/fresh [f x f1 x1]
-      (eval-expo (app q (ch 1 f x)) (ch 2 f1 x1))))))) ; q? 1 = 2
+    (fresh [r1 r2]
+     (nom/fresh [n f x f1 x1]
+      (== q (lam n (lam f (lam x (app r1 r2)))))
+      (eval-expo (app (lam n (lam f (lam x (app r1 r2)))) (ch 0 f x)) (ch 1 f1 x1))        ; q? 0 = 1
+      (eval-expo (app (lam n (lam f (lam x (app r1 r2)))) (ch 1 f x)) (ch 2 f1 x1))))))))  ; q? 1 = 2
 
-;; NOT working. Out of memory after 15 mins
-;; With 2 gigs tried to compute for 2 hours
+;; NOT working. Out of memory after 15 mins.
+;; With 2 gigs tried to compute for 2 hours.
 ;; No luck.
 (defn gen-ch+ []
   (time (first (run 1 [q]
-    (nom/fresh [f x f1 x1 f2 x2]
-      (eval-expo (app (app q (ch 1 f x)) (ch 1 f1 x1)) ; q? 1 1 =
-                 (ch 2 f2 x2)))                        ; 2
-    (nom/fresh [f x f1 x1 f2 x2]
-      (eval-expo (app (app q (ch 1 f x)) (ch 2 f1 x1)) ; q? 1 2 =
-                 (ch 3 f2 x2)))                        ; 3
-    (nom/fresh [f x f1 x1 f2 x2]
-      (eval-expo (app (app q (ch 2 f x)) (ch 2 f1 x1)) ; q? 2 2 =
-                 (ch 4 f2 x2)))))))                    ; 4
+    (fresh [r1 r2]
+      (nom/fresh [m n f x f1 x1 f2 x2]
+        (== q (lam m (lam n (lam f (lam x (app r1 r2))))))
+        (eval-expo (app (app q (ch 0 f x)) (ch 0 f1 x1)) ; q? 0 0 =
+                   (ch 0 f2 x2))                         ; 0
+        (eval-expo (app (app q (ch 0 f x)) (ch 1 f1 x1)) ; q? 0 1 =
+                   (ch 1 f2 x2))                         ; 1
+        (eval-expo (app (app q (ch 1 f x)) (ch 0 f1 x1)) ; q? 1 0 =
+                   (ch 1 f2 x2))                         ; 1
+        (eval-expo (app (app q (ch 1 f x)) (ch 1 f1 x1)) ; q? 1 1 =
+                   (ch 2 f2 x2))))))))                   ; 2

@@ -62,12 +62,23 @@ Actully canonical succ function is
 but the one I have seems to work too.  
 Probably canonical one is optimized for Church numerals, but I'm not sure. Investigating on it.
 
+Combinatory logic
+-----------------
+We can easily generate λ-quine, which Ω:
+```clojure
+(run 2 [q] (eval-expo q q))
+((fn [a_0] _1)
+ (((fn [a_0] a_0) (fn [a_1] (a_1 a_1)))
+  ((fn [a_0] a_0) (fn [a_1] (a_1 a_1)))))
+```
+We have two answers back, first one is an abstraction, which is a value and therefore evaluates to itself. And second one is (slightly un-normalised) big omega.
+
 Branches
 --------
 - [master](https://github.com/Oregu/untyped) — current approach is nominal logic programming.
 - [naive](https://github.com/Oregu/untyped/tree/naive) — evaluating expression with explicit substitution step. Not capture avoiding. Produces Church numeral 3 in half a second.
-- [cas](https://github.com/Oregu/untyped/tree/cas) — attempt to add capture avoiding step. Perfomance problems. Result looks weird. In progress.
 - [eval-only](https://github.com/Oregu/untyped/tree/eval-only) — eval-expo with passing environment around. Messy. Not capture avoiding. Produces Church numeral 3 in 2 seconds.
+- [cas](https://github.com/Oregu/untyped/tree/cas) — attempt to add capture avoiding step. Perfomance problems. Result looks weird. In progress.
 
 Future work
 -----------
@@ -77,6 +88,7 @@ Future work
 
 Resources
 ---------
+[alphaKanren](https://github.com/webyrd/alphaKanren) (with examples producing Ω and Y)  
 [Nominal Wiki](https://github.com/clojure/core.logic/wiki/core.logic.nominal)  
 [Nominal @namin talk](https://github.com/namin/minikanren-confo/blob/master/src/talk.clj)  
 [Introduction to Lambda Calculus](http://www.cse.chalmers.se/research/group/logic/TypesSS05/Extra/geuvers.pdf) — the best I've read.  

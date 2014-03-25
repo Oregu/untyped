@@ -8,6 +8,7 @@
 (defn K [x y]   (lam x (lam y x)))
 (defn I [x]     (lam x x))
 
+;; Exercices from “Introduction to Lambda Calculus”
 (defn gen-ex2-9i []
   (time (first (run 1 [q] (nom/fresh [x a]
     (eval-expo (app q x) (app x (I a))))))))
@@ -20,7 +21,7 @@
 ;   (time (first (run 1 [q] (nom/fresh [x y a]
 ;     (eval-expo (app (app q (I x)) y) (app (app x (I a)) y)))))))
 
-(defn gen-quine []
+(defn gen-quines []
   (time (doall (run 2 [q]
     (eval-expo q q)))))
 
