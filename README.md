@@ -6,21 +6,24 @@ Successor and summator
 ```clojure
 (use 'untyped.core)
 
-(first (run* [q]
+(first (run* [q] (nom/fresh [n f x]
   (eval-expo
-    '((fn [n] (fn [f] (fn [x] (f ((n f) x))))) ;; Church numerals successor
-      (fn [f] (fn [x] (f (f (f x))))))         ;; Number three (3)
-    '() q)))                                   ;; What is the result?
+    (app
+      (lam n (lam f (lam x (app f (app (app n f) x))))) ;; Church numerals successor
+        (lam f (lam x (app f (app f (app f x))))))      ;; Number three (3)
+    q))))                                               ;; What is the result?
 
-=> (fn [f] (fn [x] (f (f (f (f x))))))       ;; Four f's (we got 4)
+=> (fn [a_0] (fn [a_1] (a_0 (a_0 (a_0 (a_0 a_1))))))    ;; Four f's (we got 4)
 
-(first (run* [q]
+(first (run* [q] (nom/fresh [m n f x]
   (eval-expo
-  `((~ch-plus ~ch-three) ~ch-two)
-  '() q)))
+    (app (app (ch+ m n f x) (ch 3 f x)) (ch 2 f x))
+    q))))
 
-=> (fn [f] (fn [x] (f (f (f (f (f x)))))))   ;; Yes, five
+=> (fn [a_0] (fn [a_1] (a_0 (a_0 (a_0 (a_0 (a_0 a_1)))))))  ;; Yes, five
 ```
+Nominal logic programming made it a bit clumsy, how can it can be improved to look cleaner?
+
 Running backwards
 -----------------
 We can decrement with successor: (ch-succ q)=ch4 => q=ch3.  
