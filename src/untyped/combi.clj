@@ -8,6 +8,10 @@
 (defn K [x y]   (lam x (lam y x)))
 (defn I [x]     (lam x x))
 
+(defn Dbl [e] (app e e))
+(defn W [f x] (lam x (app f (app x x))))
+(defn Y [f x] (lam f (Dbl (W f x))))
+
 ;; Exercices from “Introduction to Lambda Calculus”
 (defn gen-ex2-9i []
   (time (first (run 1 [q] (nom/fresh [x a]

@@ -4,5 +4,5 @@
 
   ; :jvm-opts ["-Xmx2g" "-server"]
 
-  :dependencies [[org.clojure/clojure "1.6.0"]
+  :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/core.logic "0.8.7"]])

@@ -44,50 +44,10 @@
          (nom/hash c new) ;; [c/a]λc.a ≡α λa.c ≢α λc.c
          (substo e0 new a o0)))]))
 
-(defn lookupo [x env v]
-  (conde
-    [(emptyo env)
-     (== x v)]
-    [(fresh [t]
-      (conso `(~x ~v) t env))]
-    [(fresh [h hv t]
-      (conso `(~h ~hv) t env)
-      (!= x h)
-      (lookupo x t v))]))
-
-(defn eval-expo
-  ([exp val] (eval-expo exp '() val))
-  ([exp env val]
-  (conde
-    [(nomo exp) (lookupo exp env val)]
-    [(fresh [b b2]
-      (nom/fresh [x]
-        (lamo x b exp)
-        (eval-expo b env b2)
-        (lamo x b2 val)))]
-    [(fresh [rator rand r1 r2]
-      (appo rator rand exp)
-      (eval-expo rator env r1)
-      (conde
-        [(fresh [body env+]
-          (nom/fresh [x]
-            (lamo x body r1)
-            (eval-expo rand env r2)
-            (conso `(~x ~r2) env env+)
-            (eval-expo body env+ val)))]
-        [(not-fno r1)
-         (conde
-           [(emptyo env)
-            (== exp val)]
-           [(fresh [h t]
-              (conso h t env)
-              (eval-expo rand env r2)
-              (appo r1 r2 val))])]))])))
-
-#_(defn eval-expo [exp val]
+(defn eval-expo [exp val]
   (conde
     [(valo exp) (== exp val)]
-    [(fresh [rator rand r1 body]
+    [(fresh [rator rand r1 body v1]
       (nom/fresh [x]
         (appo rator rand exp)
         (lamo x body r1)
