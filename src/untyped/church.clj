@@ -25,7 +25,7 @@
   (time (first (run 1 [q]
     (fresh [r1 r2]
      (nom/fresh [n f x f1 x1]
-      (== q (lam n (lam f (lam x (app r1 r2)))))
+      #_(== q (lam n (lam f (lam x (app r1 r2)))))
       (eval-expo (app (lam n (lam f (lam x (app r1 r2)))) (ch 0 f x)) (ch 1 f1 x1))        ; q? 0 = 1
       (eval-expo (app (lam n (lam f (lam x (app r1 r2)))) (ch 1 f x)) (ch 2 f1 x1))))))))  ; q? 1 = 2
 

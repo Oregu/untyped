@@ -28,8 +28,10 @@
 ; In progress. Will's version for Petite Chez computes it for 7 minutes
 ; Not sure if mine is working at all!
 (defn gen-Y []
-  (time (doall (run 1 [Y] (nom/fresh [z]
-    (eval-expo (app Y z) (app z (app Y z))))))))
+  (time (doall (run 1 [Y] (fresh [U]
+    (appo U U Y)
+    (nom/fresh [z]
+      (eval-expo (app Y z) (app z (app Y z)))))))))
 
 (defn gen-eater [] ;; Also called K-infinity
   (time (first (run 1 [q] (nom/fresh [x]
