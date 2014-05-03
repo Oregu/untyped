@@ -33,15 +33,13 @@
       (eval-expo (app q (ch 0 f x)) (ch 1 f1 x1))        ; q? 0 = 1
       (eval-expo (app q (ch 1 f x)) (ch 2 f1 x1))))))))  ; q? 1 = 2
 
-;; NOT working. Out of memory after 15 mins.
-;; With 2 gigs tried to compute for 2 hours.
-;; No luck.
+;; No luck. Only hint helps.
 (defn gen-ch+ []
   (time (first (run 1 [q]
-    (fresh [r1 r2 r3 r4 r5]
+    (fresh [r1 r2 r3 r4]
       (nom/fresh [m n f x f1 x1 f2 x2]
-        ; With this hint runs for 5s.
-        (== q (lam m (lam n (lam f (lam x (app (app r1 r2) (app (app r3 r2) r5)))))))
+        ; With this hint answers in 5s.
+        (== q (lam m (lam n (lam f (lam x (app (app r1 r2) (app (app r3 r2) r4)))))))
         (eval-expo (app (app q (ch 0 f x)) (ch 0 f1 x1)) ; q? 0 0 =
                    (ch 0 f2 x2))                         ; 0
         (eval-expo (app (app q (ch 0 f x)) (ch 1 f1 x1)) ; q? 0 1 =

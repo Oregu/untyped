@@ -33,10 +33,33 @@
 ; Not sure if mine is working at all!
 (defn gen-Y []
   (time (doall (run 1 [Y] (fresh [U]
-    (appo U U Y)
-    (nom/fresh [z]
+    (nom/fresh [f z]
+      (lamo f (app U U) Y)
+      (nom/hash z Y)
       (eval-expo (app Y z) (app z (app Y z)))))))))
 
-(defn gen-eater [] ;; Also called K-infinity
-  (time (first (run 1 [q] (nom/fresh [x]
-    (eval-expo (app q x) q))))))
+(defn gen-Y-W []
+  (time (doall (run 1 [Y] (fresh [U]
+    (nom/fresh [f z]
+      (== `(~'lam ~(tie f `(~'app ~U ~U))) Y)
+      (nom/hash z Y)
+      (step-equalo `(~'app ~Y (~'var ~z)) `(~'app (~'var ~z) (~'app ~Y (~'var ~z))))))))))
+
+(defn gen-eater-hinted-W []
+  (time (doall (run 1 [B] (fresh [U]
+    (nom/fresh [f z]
+      (== `(~'lam ~(tie f `(~'app ~U ~U))) B)
+      (nom/hash z B)
+      (step-equalo `(~'app ~B (~'var ~z)) B)))))))
+
+(defn gen-eater-W []
+  (time (doall (run 1 [B] (nom/fresh [z]
+      (nom/hash z B)
+      (step-equalo `(~'app ~B (~'var ~z)) B))))))
+
+;; K-infinity
+;; a.k.a Hopelessly Egocentric Bird B or E, such that Bx=B or Ex=E
+(defn gen-eater []
+  (time (doall (run 1 [B] (nom/fresh [x y] (fresh [U]
+    (lamo y (app U U) B)
+    (eval-expo (app B x) B)))))))
