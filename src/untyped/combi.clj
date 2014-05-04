@@ -41,16 +41,16 @@
 (defn gen-Y-W []
   (time (doall (run 1 [Y] (fresh [U]
     (nom/fresh [f z]
-      (== `(~'lam ~(tie f `(~'app ~U ~U))) Y)
+      (lamo f (app U U) Y)
       (nom/hash z Y)
-      (step-equalo `(~'app ~Y (~'var ~z)) `(~'app (~'var ~z) (~'app ~Y (~'var ~z))))))))))
+      (step-equalo (app Y z) (app z (app Y z)))))))))
 
 (defn gen-eater-hinted-W []
   (time (doall (run 1 [B] (fresh [U]
     (nom/fresh [f z]
-      (== `(~'lam ~(tie f `(~'app ~U ~U))) B)
+      (lamo f (app U U) B)
       (nom/hash z B)
-      (step-equalo `(~'app ~B (~'var ~z)) B)))))))
+      (step-equalo (app B z) B)))))))
 
 (defn gen-eater-W []
   (time (doall (run 1 [B] (nom/fresh [z]

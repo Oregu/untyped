@@ -54,47 +54,42 @@
         (eval-expo rator r1)
         (substo body rand x val)))]))
 
-; Will's Reducer
+; Will's Reducer. Can produce recursive functions.
+; Borrowed it here: https://github.com/webyrd/alphaKanren/blob/master/tests.scm
 
-(defn substo-W [id-tm E out]
+(defn substo-W [e new a out] ;; out == [new/a]e
   (conde
-    [(nom/fresh [a]
-      (== (tie a `(~'var ~a)) id-tm)
-      (== E out))]
-    [(nom/fresh [a]
-      (fresh [B]
-        (nom/hash a B)
-        (== (tie a `(~'var ~B)) id-tm)
-        (== `(~'var ~B) out)))]
-    [(nom/fresh [a b]
-      (fresh [E1 E1+]
-        (nom/hash b E)
-        (== (tie a `(~'lam ~(tie b E1))) id-tm)
-        (== `(~'lam ~(tie b E1+)) out)
-        (substo-W (tie a E1) E E1+)))]
-    [(nom/fresh [a]
-      (fresh [E1 E2 E1+ E2+]
-        (== (tie a `(~'app ~E1 ~E2)) id-tm)
-        (== `(~'app ~E1+ ~E2+) out)
-        (substo-W (tie a E1) E E1+)
-        (substo-W (tie a E2) E E2+)))]))
+    [(nomo e) (== e a) (== new out)]
+    [(nomo e) (!= e a) (== e out)]
+    [(fresh [e1 e2 o1 o2]
+      (appo e1 e2 e)
+      (appo o1 o2 out)
+      (substo-W e1 new a o1)
+      (substo-W e2 new a o2))]
+    [(fresh [e0 o0]
+      (nom/fresh [c]
+        (lamo c e0 e)
+        (lamo c o0 out)
+        (nom/hash c a) ;; [new/c]λc.e ≡α λc.e
+        (nom/hash c new) ;; [c/a]λc.a ≡α λa.c ≢α λc.c
+        (substo-W e0 new a o0)))]))
 
 (defn betao [t1 E2+]
   (nom/fresh [b]
     (fresh [E E+]
-      (== `(~'app (~'lam ~(tie b E)) ~E+) t1)
-      (substo-W (tie b E) E+ E2+))))
+      (appo (lam b E) E+ t1)
+      (substo-W E E+ b E2+))))
 
 (defn stepo [t1 t2]
   (conde
     [(betao t1 t2)]
     [(fresh [M N M+]
-      (== `(~'app ~M ~N) t1)
-      (== `(~'app ~M+ ~N) t2)
+      (appo M N t1)
+      (appo M+ N t2)
       (stepo M M+))]
     [(fresh [M N N+]
-      (== `(~'app ~M ~N) t1)
-      (== `(~'app ~M ~N+) t2)
+      (appo M N t1)
+      (appo M N+ t2)
       (stepo N N+))]))
 
 (defn step-equalo [t1 t2]
