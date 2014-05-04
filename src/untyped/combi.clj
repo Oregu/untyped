@@ -38,7 +38,7 @@
       (nom/hash z Y)
       (eval-expo (app Y z) (app z (app Y z)))))))))
 
-(defn gen-Y-W []
+(defn gen-Y-hinted-W []
   (time (doall (run 1 [Y] (fresh [U]
     (nom/fresh [f z]
       (lamo f (app U U) Y)
@@ -46,16 +46,16 @@
       (step-equalo (app Y z) (app z (app Y z)))))))))
 
 (defn gen-eater-hinted-W []
-  (time (doall (run 1 [B] (fresh [U]
+  (time (doall (run 1 [E] (fresh [U]
     (nom/fresh [f z]
-      (lamo f (app U U) B)
-      (nom/hash z B)
-      (step-equalo (app B z) B)))))))
+      (lamo f (app U U) E)
+      (nom/hash z E)
+      (step-equalo (app E z) E)))))))
 
 (defn gen-eater-W []
-  (time (doall (run 1 [B] (nom/fresh [z]
-      (nom/hash z B)
-      (step-equalo `(~'app ~B (~'var ~z)) B))))))
+  (time (doall (run 1 [E] (nom/fresh [z]
+      (nom/hash z E)
+      (step-equalo (app E z) E))))))
 
 ;; K-infinity
 ;; a.k.a Hopelessly Egocentric Bird B or E, such that Bx=B or Ex=E
