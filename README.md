@@ -1,6 +1,8 @@
 Untyped
 ==========
-Relational lambda calculus interpreter.
+Relational lambda calculus interpreter.  
+http://hakutaku.me/posts/2014-05-05-fun-lambda-calc-minikanren.html
+
 Successor and summator
 ----------------------
 ```clojure
