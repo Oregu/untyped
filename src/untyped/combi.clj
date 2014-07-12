@@ -45,6 +45,11 @@
       (nom/hash z Y)
       (step-equalo (app Y z) (app z (app Y z)))))))))
 
+(defn gen-Y-W []
+  (time (doall (run 1 [Y] (nom/fresh [z]
+      (nom/hash z Y)
+      (step-equalo (app Y z) (app z (app Y z))))))))
+
 (defn gen-eater-hinted-W []
   (time (doall (run 1 [E] (fresh [U]
     (nom/fresh [f z]
